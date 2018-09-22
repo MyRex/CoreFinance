@@ -34,7 +34,7 @@ namespace ZFine.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseMySQL("Data Source=localhost;Database=ZFine;User ID=root;Password=sa395864@007;pooling=true;CharSet=utf8;port=3306;sslmode=none");//配置连接字符串
+            optionsBuilder.UseMySQL("Data Source=localhost;Database=zfine;User ID=root;Password=sa395864@007;pooling=true;CharSet=utf8;port=3306;sslmode=none");//配置连接字符串
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
