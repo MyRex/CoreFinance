@@ -1,0 +1,12 @@
+<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp2.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ZFine.Code\ZFine.Code.csproj" />
+    <ProjectReference Include="..\ZFine.Data\ZFine.Data.csproj" />
+  </ItemGroup>
+
+</Project>

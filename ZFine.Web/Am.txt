@@ -1,0 +1,4 @@
+Install-Package EntityFramework
+Enable-Migrations -ContextTypeName ZFine.Data.ZFineDbContext -Force
+add-migration Initial
+update-database
