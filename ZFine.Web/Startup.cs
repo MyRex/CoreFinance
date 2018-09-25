@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
@@ -32,7 +33,7 @@ namespace ZFine.Web
 
             //注意：一定要加 sslmode=none 
             var connection = Configuration.GetConnectionString("MysqlConnection");
-            //services.AddDbContext<ZFineDbContext>(options => options.UseMySql(connection, b => b.MigrationsAssembly("ZFine.Web")));
+            //services.AddDbContext<Data.ZFineDbContext>(options => options.UseMySQL(connection, b => b.MigrationsAssembly("ZFine.Web")));
             //services.Add(new ServiceDescriptor(typeof(ZFineDbContext), new ZFineDbContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
