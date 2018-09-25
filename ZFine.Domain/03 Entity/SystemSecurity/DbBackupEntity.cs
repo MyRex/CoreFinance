@@ -5,9 +5,11 @@
  *
 *********************************************************************************/
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemSecurity
 {
+    [Table("Sys_DbBackup")]
     public class FilterIPEntity : IEntity<FilterIPEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string F_Id { get; set; }

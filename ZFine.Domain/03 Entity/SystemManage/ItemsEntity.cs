@@ -5,9 +5,11 @@
  *
 *********************************************************************************/
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemManage
 {
+    [Table("Sys_Items")]
     public class ItemsEntity : IEntity<ItemsEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
         public string F_Id { get; set; }

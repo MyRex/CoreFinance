@@ -5,9 +5,11 @@
  *
 *********************************************************************************/
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemManage
 {
+    [Table("Sys_Module")]
     public class ModuleEntity : IEntity<ModuleEntity>, ICreationAudited, IModificationAudited, IDeleteAudited
     {
         public string F_Id { get; set; }

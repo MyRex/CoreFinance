@@ -10,17 +10,17 @@ using ZFine.Domain.Entity.SystemManage;
 
 namespace ZFine.Mapping.SystemManage
 {
-    public class ModuleMap : Data.DBContext.EntityMappingConfiguration<ModuleEntity>
+    public class ModuleMap : IEntityTypeConfiguration<ModuleEntity>
     {
         public ModuleMap()
         {
             
         }
 
-        public override void Map(EntityTypeBuilder<ModuleEntity> b)
+        public void Configure(EntityTypeBuilder<ModuleEntity> builder)
         {
-            b.ToTable("Sys_Module");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
+
         }
     }
 }

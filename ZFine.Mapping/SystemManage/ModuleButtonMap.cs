@@ -10,17 +10,18 @@ using ZFine.Domain.Entity.SystemManage;
 
 namespace ZFine.Mapping.SystemManage
 {
-    public class ModuleButtonMap : Data.DBContext.EntityMappingConfiguration<ModuleButtonEntity>
+    public class ModuleButtonMap : IEntityTypeConfiguration<ModuleButtonEntity>
     {
         public ModuleButtonMap()
         {
             
         }
 
-        public override void Map(EntityTypeBuilder<ModuleButtonEntity> b)
+        public void Configure(EntityTypeBuilder<ModuleButtonEntity> builder)
         {
-            b.ToTable("Sys_ModuleButton");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
         }
+
+       
     }
 }

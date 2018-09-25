@@ -10,17 +10,17 @@ using ZFine.Domain.Entity.SystemSecurity;
 
 namespace ZFine.Mapping.SystemSecurity
 {
-    public class FilterIPMap : Data.DBContext.EntityMappingConfiguration<FilterIPEntity>
+    public class FilterIPMap : IEntityTypeConfiguration<FilterIPEntity>
     {
         public FilterIPMap()
         {
             
         }
 
-        public override void Map(EntityTypeBuilder<FilterIPEntity> b)
-        {
-            b.ToTable("Sys_FilterIP");
-            b.HasKey(t => t.F_Id);
+        public void Configure(EntityTypeBuilder<FilterIPEntity> builder)
+        {           
+            builder.HasKey(t => t.F_Id);
         }
+
     }
 }

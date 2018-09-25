@@ -4,16 +4,13 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
-using Microsoft.EntityFrameworkCore;
-using System;
 
-using System.Linq;
-using System.Reflection;
+using Microsoft.EntityFrameworkCore;
 using ZFine.Data.DBContext;
 
 namespace ZFine.Data
 {
-   
+
     public class ZFineDbContext : DbContext
     {
         public string ConnectionString { get; set; }
@@ -32,8 +29,8 @@ namespace ZFine.Data
         }
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            //base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseMySQL("server=localhost;database=tt;user id=root;password=sa395864@007;SslMode=none;");//配置连接字符串
+            base.OnConfiguring(optionsBuilder);
+            //optionsBuilder.UseMySQL("server=localhost;database=tt;user id=root;password=sa395864@007;SslMode=none;");//配置连接字符串
         }
         //protected override void OnModelCreating(ModelBuilder modelBuilder)
         //{

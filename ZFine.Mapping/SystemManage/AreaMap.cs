@@ -15,7 +15,6 @@ namespace ZFine.Mapping.SystemManage
     {
         public void Configure(EntityTypeBuilder<AreaEntity> builder)
         {
-            builder.ToTable("Sys_Area");
             builder.HasKey(t => t.F_Id);
         } 
         

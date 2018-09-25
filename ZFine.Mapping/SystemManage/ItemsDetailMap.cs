@@ -10,16 +10,18 @@ using ZFine.Domain.Entity.SystemManage;
 
 namespace ZFine.Mapping.SystemManage
 {
-    public class ItemsDetailMap : Data.DBContext.EntityMappingConfiguration<ItemsDetailEntity>
+    public class ItemsDetailMap : IEntityTypeConfiguration<ItemsDetailEntity>
     {
         public ItemsDetailMap()
         {
             
         }
-        public override void Map(EntityTypeBuilder<ItemsDetailEntity> b)
+
+        public void Configure(EntityTypeBuilder<ItemsDetailEntity> builder)
         {
-            b.ToTable("Sys_ItemsDetail");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
         }
+
+        
     }
 }

@@ -5,9 +5,11 @@
  *
 *********************************************************************************/
 using System;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemSecurity
 {
+    [Table("Sys_Log")]
     public class LogEntity : IEntity<LogEntity>, ICreationAudited
     {
         public string F_Id { get; set; }

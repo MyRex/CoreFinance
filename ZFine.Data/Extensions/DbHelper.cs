@@ -4,8 +4,6 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
-using MySql.Data.MySqlClient;
-using System.Configuration;
 using System.Data;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -14,12 +12,12 @@ namespace ZFine.Data.Extensions
 {
     public class DbHelper
     {
-        private static string connstring = ConfigurationManager.ConnectionStrings["ZFineDbContext"].ConnectionString;
+        private static string connstring = "";//ConfigurationManager.ConnectionStrings["ZFineDbContext"].ConnectionString;
         public static int ExecuteSqlCommand(string cmdText)
         {
-            using (DbConnection conn = new MySqlConnection(connstring))
+            using (DbConnection conn = new SqlConnection(connstring))
             {
-                DbCommand cmd = new MySqlCommand();
+                DbCommand cmd = new SqlCommand();
                 PrepareCommand(cmd, conn, null, CommandType.Text, cmdText, null);
                 return cmd.ExecuteNonQuery();
             }

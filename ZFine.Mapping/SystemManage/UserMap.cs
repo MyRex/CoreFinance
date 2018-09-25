@@ -10,17 +10,16 @@ using ZFine.Domain.Entity.SystemManage;
 
 namespace ZFine.Mapping.SystemManage
 {
-    public class UserMap : Data.DBContext.EntityMappingConfiguration<UserEntity>
+    public class UserMap : IEntityTypeConfiguration<UserEntity>
     {
         public UserMap()
         {
             
         }
 
-        public override void Map(EntityTypeBuilder<UserEntity> b)
+        public void Configure(EntityTypeBuilder<UserEntity> builder)
         {
-            b.ToTable("Sys_User");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
         }
     }
 }

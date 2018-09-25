@@ -10,17 +10,17 @@ using ZFine.Domain.Entity.SystemManage;
 
 namespace ZFine.Mapping.SystemManage
 {
-    public class UserLogOnMap : Data.DBContext.EntityMappingConfiguration<UserLogOnEntity>
+    public class UserLogOnMap : IEntityTypeConfiguration<UserLogOnEntity>
     {
         public UserLogOnMap()
         {
            
         }
 
-        public override void Map(EntityTypeBuilder<UserLogOnEntity> b)
+        public void Configure(EntityTypeBuilder<UserLogOnEntity> builder)
         {
-            b.ToTable("Sys_UserLogOn");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
         }
+        
     }
 }

@@ -26,12 +26,12 @@ namespace ZFine.Data
         private DbTransaction dbTransaction { get; set; }
         public IRepositoryBase BeginTrans()
         {
-            DbConnection dbConnection = dbcontext.Database.GetDbConnection();
-            if (dbConnection.State == ConnectionState.Closed)
-            {
-                dbConnection.Open();
-            }
-            dbTransaction = dbConnection.BeginTransaction();
+            //DbConnection dbConnection = dbcontext.Database.CurrentTransaction.;
+            //if (dbConnection.State == ConnectionState.Closed)
+            //{
+            //    dbConnection.Open();
+            //}
+            //dbTransaction = dbConnection.BeginTransaction();
             return this;
         }
         public int Commit()

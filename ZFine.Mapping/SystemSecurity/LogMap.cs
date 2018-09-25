@@ -10,17 +10,17 @@ using ZFine.Domain.Entity.SystemSecurity;
 
 namespace ZFine.Mapping.SystemSecurity
 {
-    public class LogMap : Data.DBContext.EntityMappingConfiguration<LogEntity>
+    public class LogMap : IEntityTypeConfiguration<LogEntity>
     {
         public LogMap()
         {
            
         }
 
-        public override void Map(EntityTypeBuilder<LogEntity> b)
+        public void Configure(EntityTypeBuilder<LogEntity> builder)
         {
-            b.ToTable("Sys_Log");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
         }
+
     }
 }

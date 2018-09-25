@@ -10,17 +10,17 @@ using ZFine.Domain.Entity.SystemManage;
 
 namespace ZFine.Mapping.SystemManage
 {
-    public class RoleMap : Data.DBContext.EntityMappingConfiguration<RoleEntity>
+    public class RoleMap : IEntityTypeConfiguration<RoleEntity>
     {
         public RoleMap()
         {
            
         }
 
-        public override void Map(EntityTypeBuilder<RoleEntity> b)
+        public void Configure(EntityTypeBuilder<RoleEntity> builder)
         {
-            b.ToTable("Sys_Role");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
         }
+       
     }
 }

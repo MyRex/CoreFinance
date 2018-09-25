@@ -10,17 +10,18 @@ using ZFine.Domain.Entity.SystemManage;
 
 namespace ZFine.Mapping.SystemManage
 {
-    public class OrganizeMap : Data.DBContext.EntityMappingConfiguration<OrganizeEntity>
+    public class OrganizeMap : IEntityTypeConfiguration<OrganizeEntity>
     {
         public OrganizeMap()
         {
             
         }
 
-        public override void Map(EntityTypeBuilder<OrganizeEntity> b)
+        public void Configure(EntityTypeBuilder<OrganizeEntity> builder)
         {
-            b.ToTable("Sys_Organize");
-            b.HasKey(t => t.F_Id);
+            builder.HasKey(t => t.F_Id);
         }
+
+      
     }
 }

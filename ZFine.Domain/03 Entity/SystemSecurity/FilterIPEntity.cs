@@ -6,9 +6,11 @@
 *********************************************************************************/
 using System;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemSecurity
 {
+    [Table("Sys_FilterIP")]
     public class DbBackupEntity : ICreationAudited, IDeleteAudited, IModificationAudited
     {
         [Key]
