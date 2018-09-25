@@ -5,6 +5,7 @@
  *
 *********************************************************************************/
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemManage
@@ -12,6 +13,7 @@ namespace ZFine.Domain.Entity.SystemManage
     [Table("Sys_ModuleButton")]
     public class ModuleButtonEntity : IEntity<ModuleButtonEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
+        [Key]
         public string F_Id { get; set; }
         public string F_ModuleId { get; set; }
         public string F_ParentId { get; set; }

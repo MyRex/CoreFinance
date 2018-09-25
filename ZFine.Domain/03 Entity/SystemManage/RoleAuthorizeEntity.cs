@@ -5,6 +5,7 @@
  *
 *********************************************************************************/
 using System;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemManage
@@ -12,6 +13,7 @@ namespace ZFine.Domain.Entity.SystemManage
     [Table("Sys_RoleAuthorize")]
     public class RoleAuthorizeEntity : IEntity<RoleAuthorizeEntity>, ICreationAudited
     {
+        [Key]
         public string F_Id { get; set; }
         public int? F_ItemType { get; set; }
         public string F_ItemId { get; set; }
