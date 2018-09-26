@@ -5,7 +5,6 @@
  *
 *********************************************************************************/
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemManage
@@ -13,7 +12,6 @@ namespace ZFine.Domain.Entity.SystemManage
     [Table("Sys_Module")]
     public class ModuleEntity : IEntity<ModuleEntity>, ICreationAudited, IModificationAudited, IDeleteAudited
     {
-        [Key]
         public string F_Id { get; set; }
         public string F_ParentId { get; set; }
         public int? F_Layers { get; set; }

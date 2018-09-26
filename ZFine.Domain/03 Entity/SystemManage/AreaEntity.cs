@@ -5,7 +5,6 @@
  *
 *********************************************************************************/
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemManage
@@ -13,7 +12,6 @@ namespace ZFine.Domain.Entity.SystemManage
     [Table("Sys_Area")]
     public class AreaEntity : IEntity<AreaEntity>, ICreationAudited, IDeleteAudited, IModificationAudited
     {
-        [Key]
         public string F_Id { get; set; }
         public string F_ParentId { get; set; }
         public int? F_Layers { get; set; }
