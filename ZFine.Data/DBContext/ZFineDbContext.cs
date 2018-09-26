@@ -31,7 +31,7 @@ namespace ZFine.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            optionsBuilder.UseMySql("server=localhost;database=tt;user id=root;password=sa395864@007;SslMode=none;");//配置连接字符串
+            //optionsBuilder.UseMySql("server=localhost;database=tt;user id=root;password=sa395864@007;SslMode=none;");//配置连接字符串
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
