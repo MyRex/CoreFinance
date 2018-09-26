@@ -25,7 +25,7 @@ namespace ZFine.Data
     {
         public ZFineDbContext dbcontext = new ZFineDbContext();
         public int Insert(TEntity entity)
-        {
+        {            
             dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
             return dbcontext.SaveChanges();
         }
