@@ -15,7 +15,7 @@ namespace ZFine.Data
     public class ZFineDbContext : DbContext
     {
         public string ConnectionString { get; set; }
-        //public virtual DbSet<FilterIPEntity> FilterIPEntitys { get; set; }
+        //public virtual DbSet<LogEntity> LogEntitys { get; set; }
         public ZFineDbContext()
         { }
         public ZFineDbContext(string connectionString)
@@ -31,11 +31,11 @@ namespace ZFine.Data
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
             base.OnConfiguring(optionsBuilder);
-            //optionsBuilder.UseMySql("server=localhost;database=tt;user id=root;password=sa395864@007;SslMode=none;");//配置连接字符串
+            optionsBuilder.UseMySql("server=localhost;database=tt;user id=root;password=sa395864@007;SslMode=none;");//配置连接字符串
         }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            base.OnModelCreating(modelBuilder);
+            
             string assembleFileName = Assembly.GetExecutingAssembly().CodeBase.Replace("ZFine.Data.dll", "ZFine.Domain.dll").Replace("file:///", "");
             Assembly asm = Assembly.LoadFile(assembleFileName);
             var typesToRegister = asm.GetTypes()
@@ -50,7 +50,7 @@ namespace ZFine.Data
                 if (modelBuilder.Model.FindEntityType(entityType) != null)
                     continue;
 
-                modelBuilder.Model.AddEntityType(entityType);
+                modelBuilder.Model.GetOrAddEntityType(entityType);
             }
             //assembleFileName = assembleFileName.Replace("ZFine.Domain.dll", "ZFine.Mapping.dll");
             //asm = Assembly.LoadFile(assembleFileName);
@@ -61,8 +61,16 @@ namespace ZFine.Data
             //    dynamic configurationInstance = Activator.CreateInstance(type);
             //    modelBuilder.ApplyConfiguration(configurationInstance);
             //}
+            foreach (var entity in modelBuilder.Model.GetEntityTypes())
+            {
+                var currentTableName = modelBuilder.Entity(entity.Name).Metadata.Relational().TableName;
+                modelBuilder.Entity(entity.Name).ToTable(currentTableName.ToLower());
 
-
+                var properties = entity.GetProperties();
+                foreach (var property in properties)
+                    modelBuilder.Entity(entity.Name).Property(property.Name).HasColumnName(property.Name.ToLower());
+            }
+            base.OnModelCreating(modelBuilder);
         }
     }
 }

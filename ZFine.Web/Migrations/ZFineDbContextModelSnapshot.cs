@@ -3,7 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
-using ZFine.Data;
+using ZFine.Domain.Entity;
 
 namespace ZFine.Web.Migrations
 {

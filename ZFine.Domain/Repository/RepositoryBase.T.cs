@@ -14,8 +14,9 @@ using System.Linq.Expressions;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using ZFine.Code;
+using ZFine.Domain.Entity;
 
-namespace ZFine.Data
+namespace ZFine.Domain.Repository
 {
     /// <summary>
     /// 仓储实现
@@ -52,7 +53,7 @@ namespace ZFine.Data
                 {
                     if (prop.GetValue(entity, null).ToString() == "&nbsp;")
                         dbcontext.Entry(entity).Property(prop.Name).CurrentValue = null;
-                    dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                    if (prop.Name != "F_Id") dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
                 }
             }
             return dbcontext.SaveChanges();

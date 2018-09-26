@@ -4,12 +4,14 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
-using ZFine.Domain.Entity.SystemManage;
-using ZFine.Domain.Repository;
 
-namespace ZFine.Domain.IRepository.SystemManage
+namespace ZFine.Domain.Extensions
 {
-    public interface IItemsRepository : IRepositoryBase<ItemsEntity>
+    /// <summary>
+    /// 实体接口相关扩展
+    /// </summary>
+    public static class EntityInterfaceExtensions
     {
+        
     }
 }

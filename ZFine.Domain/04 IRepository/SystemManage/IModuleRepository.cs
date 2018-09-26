@@ -4,8 +4,8 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
-using ZFine.Data;
 using ZFine.Domain.Entity.SystemManage;
+using ZFine.Domain.Repository;
 
 namespace ZFine.Domain.IRepository.SystemManage
 {

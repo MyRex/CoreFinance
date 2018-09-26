@@ -4,11 +4,10 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
-using ZFine.Data;
+using System.Collections.Generic;
 using ZFine.Domain.Entity.SystemManage;
 using ZFine.Domain.IRepository.SystemManage;
-using ZFine.Repository.SystemManage;
-using System.Collections.Generic;
+using ZFine.Domain.Repository;
 
 namespace ZFine.Repository.SystemManage
 {

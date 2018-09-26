@@ -33,7 +33,7 @@ namespace ZFine.Web
 
             //注意：一定要加 sslmode=none 
             var connection = Configuration.GetConnectionString("MysqlConnection");
-            services.AddDbContext<Data.ZFineDbContext>(options => options.UseMySql(connection, b => b.MigrationsAssembly("ZFine.Web")));
+            services.AddDbContext<Domain.Entity.ZFineDbContext>(options => options.UseMySql(connection, b => b.MigrationsAssembly("ZFine.Web")));
             //services.Add(new ServiceDescriptor(typeof(ZFineDbContext), new ZFineDbContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
@@ -59,7 +59,9 @@ namespace ZFine.Web
             app.UseSession();
             app.UseMvc(routes =>
             {
-                //routes.MapRoute("areaRoute", "{area:exists}/{controller}/{action=Index}/{id?}");
+                routes.MapRoute(
+                    name: "area",
+                    template: "{area:exists}/{controller=Home}/{action=Index}/{id?}");
                 routes.MapRoute(
                     name: "default",
                     template: "{controller}/{action}/{id}",

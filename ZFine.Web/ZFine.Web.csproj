@@ -21,7 +21,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ZFine.Application\ZFine.Application.csproj" />
-    <ProjectReference Include="..\ZFine.Data\ZFine.Data.csproj" />
     <ProjectReference Include="..\ZFine.Domain\ZFine.Domain.csproj" />
     <ProjectReference Include="..\ZFine.Mapping\ZFine.Mapping.csproj" />
     <ProjectReference Include="..\ZFine.Repository\ZFine.Repository.csproj" />

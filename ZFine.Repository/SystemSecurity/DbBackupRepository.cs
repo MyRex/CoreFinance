@@ -5,10 +5,10 @@
  *
 *********************************************************************************/
 using ZFine.Code;
-using ZFine.Data;
-using ZFine.Data.Extensions;
 using ZFine.Domain.Entity.SystemSecurity;
+using ZFine.Domain.Extensions;
 using ZFine.Domain.IRepository.SystemSecurity;
+using ZFine.Domain.Repository;
 
 namespace ZFine.Repository.SystemSecurity
 {
