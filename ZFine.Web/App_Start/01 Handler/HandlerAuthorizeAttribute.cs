@@ -15,8 +15,12 @@ namespace ZFine.Web
         }
         public override void OnActionExecuting(ActionExecutingContext filterContext)
         {
-            if (OperatorProvider.Provider.GetCurrent().IsSystem)
+            if (OperatorProvider.Provider.GetCurrent() == null)
             {
+                filterContext.Result = new RedirectResult("../");
+            }
+            if (OperatorProvider.Provider.GetCurrent().IsSystem)
+            {                
                 return;
             }
             if (Ignore == false)
