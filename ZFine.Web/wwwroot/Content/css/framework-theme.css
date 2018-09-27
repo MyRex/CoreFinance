@@ -249,10 +249,7 @@ a:hover,a:focus{color:#475059;}
 @media only screen and (min-width:1170px){.theme-white .cd-timeline-content .cd-date{color:#2ecc71;}}@media (max-width:991px){.theme-white #logo.navbar-brand > img.normal-logo.logo-white{display:block;}
 .theme-white #logo.navbar-brand > img.normal-logo.logo-black{display:none;}
 .theme-white .navbar > .container .navbar-brand{background-color:#2ecc71;}}
-.theme-blue-gradient #header-navbar {
-    box-shadow: 0px 1px 3px 0 rgba(0,0,0,0.1);
-    background: #2c3e50;
-}
+.theme-blue-gradient #header-navbar{box-shadow: 0px 1px 3px 0 rgba(0,0,0,0.1);background:#1ABC9C;}
 .theme-blue-gradient #config-tool #skin-colors li a.skin-changer.blue-gradient{background:#1ABC9C;}
 .theme-blue-gradient .navbar > .container .navbar-brand{background:transparent;}
 .theme-blue-gradient .content-tabs{border-bottom:solid 2px #2c3e50;background:#fff !important;height:41px;border-top:none;}
