@@ -4,6 +4,7 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
+using MySql.Data.MySqlClient;
 using System.Collections.Generic;
 using System.Data.Common;
 using System.Data.SqlClient;
@@ -27,9 +28,9 @@ namespace ZFine.Repository.SystemManage
                                     AND d.F_EnabledMark = 1
                                     AND d.F_DeleteMark = 0
                             ORDER BY d.F_SortCode ASC");
-            DbParameter[] parameter = 
+            MySqlParameter[] parameter = 
             {
-                 new SqlParameter("@enCode",enCode)
+                 new MySqlParameter("@enCode",enCode)
             };
             return this.FindList(strSql.ToString(), parameter);
         }

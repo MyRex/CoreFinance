@@ -74,6 +74,8 @@ namespace ZFine.Web.Migrations
 
                     b.Property<string>("F_Description");
 
+                    b.Property<string>("F_EnCode");
+
                     b.Property<bool?>("F_EnabledMark");
 
                     b.Property<bool?>("F_IsDefault");

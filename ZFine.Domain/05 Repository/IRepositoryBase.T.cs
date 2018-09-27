@@ -10,6 +10,8 @@ using System.Collections.Generic;
 using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
+using System.Data.SqlClient;
+using MySql.Data.MySqlClient;
 
 namespace ZFine.Domain.Repository
 {
@@ -29,7 +31,7 @@ namespace ZFine.Domain.Repository
         IQueryable<TEntity> IQueryable();
         IQueryable<TEntity> IQueryable(Expression<Func<TEntity, bool>> predicate);
         List<TEntity> FindList(string strSql);
-        List<TEntity> FindList(string strSql, DbParameter[] dbParameter);
+        List<TEntity> FindList(string strSql, MySqlParameter[] dbParameter);
         List<TEntity> FindList(Pagination pagination);
         List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate, Pagination pagination);
     }

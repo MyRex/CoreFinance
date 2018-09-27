@@ -19,6 +19,7 @@ namespace ZFine.Domain.Entity.SystemManage
         public string F_ParentId { get; set; }
         public string F_ItemCode { get; set; }
         public string F_ItemName { get; set; }
+        public string F_EnCode { get; set; }
         public string F_SimpleSpelling { get; set; }
         public bool? F_IsDefault { get; set; }
         public int? F_Layers { get; set; }

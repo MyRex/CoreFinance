@@ -4,10 +4,10 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
-
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Data.Common;
 using System.Linq;
 using System.Linq.Expressions;
@@ -21,29 +21,66 @@ namespace ZFine.Domain.Repository
     /// <summary>
     /// 仓储实现
     /// </summary>
-    /// <typeparam name="TEntity">
-    /// </typeparam>
-    public class RepositoryBase<TEntity> : IRepositoryBase<TEntity> where TEntity : class,new()
+    public class RepositoryBase : IRepositoryBase, IDisposable
     {
-        public ZFineDbContext dbcontext = new ZFineDbContext();
-        //static string connection = @"server=localhost;database=tt;user id=root;password=sa395864@007;SslMode=none;";
-        //static DbContextOptions<ZFineDbContext> dbContextOption = new DbContextOptions<ZFineDbContext>();
-        //static DbContextOptionsBuilder<ZFineDbContext> dbContextOptionBuilder = new DbContextOptionsBuilder<ZFineDbContext>(dbContextOption);
-        //ZFineDbContext dbcontext = new ZFineDbContext(dbContextOptionBuilder.UseMySql(connection).Options);
-        public int Insert(TEntity entity)
+        private ZFineDbContext dbcontext = new ZFineDbContext();
+        private DbTransaction dbTransaction { get; set; }
+        public IRepositoryBase BeginTrans()
         {
-            dbcontext.Entry<TEntity>(entity).State= EntityState.Added;
-            return dbcontext.SaveChanges();
+            DbConnection dbConnection = dbcontext.Database.GetDbConnection();
+            if (dbConnection.State == ConnectionState.Closed)
+            {
+                dbConnection.Open();
+            }
+            dbTransaction = dbConnection.BeginTransaction();
+            return this;
         }
-        public int Insert(List<TEntity> entitys)
+        public int Commit()
+        {
+            try
+            {
+                var returnValue = dbcontext.SaveChanges();
+                if (dbTransaction != null)
+                {
+                    dbTransaction.Commit();
+                }
+                return returnValue;
+            }
+            catch (Exception)
+            {
+                if (dbTransaction != null)
+                {
+                    this.dbTransaction.Rollback();
+                }
+                throw;
+            }
+            finally
+            {
+                this.Dispose();
+            }
+        }
+        public void Dispose()
+        {
+            if (dbTransaction != null)
+            {
+                this.dbTransaction.Dispose();
+            }
+            this.dbcontext.Dispose();
+        }
+        public int Insert<TEntity>(TEntity entity) where TEntity : class
+        {
+            dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
+            return dbTransaction == null ? this.Commit() : 0;
+        }
+        public int Insert<TEntity>(List<TEntity> entitys) where TEntity : class
         {
             foreach (var entity in entitys)
             {
                 dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
             }
-            return dbcontext.SaveChanges();
+            return dbTransaction == null ? this.Commit() : 0;
         }
-        public int Update(TEntity entity)
+        public int Update<TEntity>(TEntity entity) where TEntity : class
         {
             dbcontext.Set<TEntity>().Attach(entity);
             PropertyInfo[] props = entity.GetType().GetProperties();
@@ -53,48 +90,48 @@ namespace ZFine.Domain.Repository
                 {
                     if (prop.GetValue(entity, null).ToString() == "&nbsp;")
                         dbcontext.Entry(entity).Property(prop.Name).CurrentValue = null;
-                    if (prop.Name != "F_Id") dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
+                    dbcontext.Entry(entity).Property(prop.Name).IsModified = true;
                 }
             }
-            return dbcontext.SaveChanges();
+            return dbTransaction == null ? this.Commit() : 0;
         }
-        public int Delete(TEntity entity)
+        public int Delete<TEntity>(TEntity entity) where TEntity : class
         {
             dbcontext.Set<TEntity>().Attach(entity);
             dbcontext.Entry<TEntity>(entity).State = EntityState.Deleted;
-            return dbcontext.SaveChanges();
+            return dbTransaction == null ? this.Commit() : 0;
         }
-        public int Delete(Expression<Func<TEntity, bool>> predicate)
+        public int Delete<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             var entitys = dbcontext.Set<TEntity>().Where(predicate).ToList();
             entitys.ForEach(m => dbcontext.Entry<TEntity>(m).State = EntityState.Deleted);
-            return dbcontext.SaveChanges();
+            return dbTransaction == null ? this.Commit() : 0;
         }
-        public TEntity FindEntity(object keyValue)
+        public TEntity FindEntity<TEntity>(object keyValue) where TEntity : class
         {
             return dbcontext.Set<TEntity>().Find(keyValue);
         }
-        public TEntity FindEntity(Expression<Func<TEntity, bool>> predicate)
+        public TEntity FindEntity<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             return dbcontext.Set<TEntity>().FirstOrDefault(predicate);
         }
-        public IQueryable<TEntity> IQueryable()
+        public IQueryable<TEntity> IQueryable<TEntity>() where TEntity : class
         {
             return dbcontext.Set<TEntity>();
         }
-        public IQueryable<TEntity> IQueryable(Expression<Func<TEntity, bool>> predicate)
+        public IQueryable<TEntity> IQueryable<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
             return dbcontext.Set<TEntity>().Where(predicate);
         }
-        public List<TEntity> FindList(string strSql)
+        public List<TEntity> FindList<TEntity>(string strSql) where TEntity : class
         {
             return null;// dbcontext.Database.SqlQuery<TEntity>(strSql).ToList<TEntity>();
         }
-        public List<TEntity> FindList(string strSql, DbParameter[] dbParameter)
+        public List<TEntity> FindList<TEntity>(string strSql, DbParameter[] dbParameter) where TEntity : class
         {
-            return null;// dbcontext.Database.SqlQuery(SqlQuery<TEntity>(strSql, dbParameter).ToList<TEntity>();
+            return null;// dbcontext.Database.SqlQuery<TEntity>(strSql, dbParameter).ToList<TEntity>();
         }
-        public List<TEntity> FindList(Pagination pagination)
+        public List<TEntity> FindList<TEntity>(Pagination pagination) where TEntity : class,new()
         {
             bool isAsc = pagination.sord.ToLower() == "asc" ? true : false;
             string[] _order = pagination.sidx.Split(',');
@@ -122,7 +159,7 @@ namespace ZFine.Domain.Repository
             tempData = tempData.Skip<TEntity>(pagination.rows * (pagination.page - 1)).Take<TEntity>(pagination.rows).AsQueryable();
             return tempData.ToList();
         }
-        public List<TEntity> FindList(Expression<Func<TEntity, bool>> predicate, Pagination pagination)
+        public List<TEntity> FindList<TEntity>(Expression<Func<TEntity, bool>> predicate, Pagination pagination) where TEntity : class,new()
         {
             bool isAsc = pagination.sord.ToLower() == "asc" ? true : false;
             string[] _order = pagination.sidx.Split(',');
