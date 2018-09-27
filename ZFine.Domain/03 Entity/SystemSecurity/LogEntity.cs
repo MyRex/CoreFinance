@@ -5,7 +5,6 @@
  *
 *********************************************************************************/
 using System;
-using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace ZFine.Domain.Entity.SystemSecurity
@@ -13,7 +12,6 @@ namespace ZFine.Domain.Entity.SystemSecurity
     [Table("Sys_Log")]
     public class LogEntity : IEntity<LogEntity>, ICreationAudited
     {
-        [Key]
         public string F_Id { get; set; }
         public DateTime? F_Date { get; set; }
         public string F_Account { get; set; }
