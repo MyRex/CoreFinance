@@ -66,9 +66,11 @@ namespace ZFine.Domain.Repository
         }
         public int Delete(Expression<Func<TEntity, bool>> predicate)
         {
-            var entitys = dbcontext.Set<TEntity>().Where(predicate).ToList();
-            entitys.ForEach(m => dbcontext.Entry<TEntity>(m).State = EntityState.Deleted);
-            return dbcontext.SaveChanges();
+            
+                var entitys = dbcontext.Set<TEntity>().Where(predicate).ToList();
+                entitys.ForEach(m => dbcontext.Entry<TEntity>(m).State = EntityState.Deleted);
+                return dbcontext.SaveChanges();
+            
         }
         public TEntity FindEntity(object keyValue)
         {

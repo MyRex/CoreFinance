@@ -6,6 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
+using Microsoft.Extensions.Logging;
 using ZFine.Code;
 
 namespace ZFine.Web
@@ -32,9 +33,16 @@ namespace ZFine.Web
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
 
             //注意：一定要加 sslmode=none 
-            var connection = Configuration.GetConnectionString("MysqlConnection");
-            services.AddDbContext<Domain.Entity.ZFineDbContext>(options => options.UseMySql(connection, b => b.MigrationsAssembly("ZFine.Web")));
-            //services.Add(new ServiceDescriptor(typeof(ZFineDbContext), new ZFineDbContext(Configuration.GetConnectionString("DefaultConnection"))));
+            var connectString = Configuration.GetConnectionString("MysqlConnection"); services.AddDbContext<Domain.Entity.ZFineDbContext>(options =>
+
+            {
+                options.UseMySql(connectString);
+                options.UseLoggerFactory(
+new LoggerFactory().AddConsole()); //加入该句会把EF Core执行过程中的Sql语句在控制台输出
+            });
+            //var connection = Configuration.GetConnectionString("MysqlConnection");
+            //services.AddDbContext<Domain.Entity.ZFineDbContext>(options => options.UseMySql(connection, b => b.MigrationsAssembly("ZFine.Web")));
+            //services.Add(new ServiceDescriptor(typeof(Domain.Entity.ZFineDbContext), new Domain.Entity.ZFineDbContext(Configuration.GetConnectionString("DefaultConnection"))));
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }

@@ -17,7 +17,8 @@ namespace ZFine.Web
         {
             if (OperatorProvider.Provider.GetCurrent() == null)
             {
-                filterContext.Result = new RedirectResult("../");
+                filterContext.Result = new RedirectResult("/Login");
+                return;
             }
             if (OperatorProvider.Provider.GetCurrent().IsSystem)
             {                

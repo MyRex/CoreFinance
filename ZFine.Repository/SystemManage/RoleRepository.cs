@@ -17,8 +17,9 @@ namespace ZFine.Repository.SystemManage
         {
             using (var db = new RepositoryBase().BeginTrans())
             {
-                db.Delete<RoleEntity>(t => t.F_Id == keyValue);
+                
                 db.Delete<RoleAuthorizeEntity>(t => t.F_ObjectId == keyValue);
+                db.Delete<RoleEntity>(t => t.F_Id == keyValue);
                 db.Commit();
             }
         }

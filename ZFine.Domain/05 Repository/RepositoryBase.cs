@@ -5,6 +5,7 @@
  *
 *********************************************************************************/
 using Microsoft.EntityFrameworkCore;
+using NPOI.SS.Formula.Functions;
 using System;
 using System.Collections.Generic;
 using System.Data;
@@ -23,7 +24,7 @@ namespace ZFine.Domain.Repository
     /// </summary>
     public class RepositoryBase : IRepositoryBase, IDisposable
     {
-        private ZFineDbContext dbcontext = new ZFineDbContext();
+        private ZFineDbContext dbcontext= new ZFineDbContext();
         private DbTransaction dbTransaction { get; set; }
         public IRepositoryBase BeginTrans()
         {
@@ -32,7 +33,7 @@ namespace ZFine.Domain.Repository
             {
                 dbConnection.Open();
             }
-            dbTransaction = dbConnection.BeginTransaction();
+            //dbTransaction = dbConnection.BeginTransaction();
             return this;
         }
         public int Commit()
@@ -61,11 +62,11 @@ namespace ZFine.Domain.Repository
         }
         public void Dispose()
         {
-            if (dbTransaction != null)
-            {
-                this.dbTransaction.Dispose();
-            }
-            this.dbcontext.Dispose();
+            //if (dbTransaction != null)
+            //{
+            //    this.dbTransaction.Dispose();
+            //}
+            //this.dbcontext.Dispose();
         }
         public int Insert<TEntity>(TEntity entity) where TEntity : class
         {
@@ -77,7 +78,7 @@ namespace ZFine.Domain.Repository
             foreach (var entity in entitys)
             {
                 dbcontext.Entry<TEntity>(entity).State = EntityState.Added;
-            }
+            }  
             return dbTransaction == null ? this.Commit() : 0;
         }
         public int Update<TEntity>(TEntity entity) where TEntity : class
@@ -97,15 +98,27 @@ namespace ZFine.Domain.Repository
         }
         public int Delete<TEntity>(TEntity entity) where TEntity : class
         {
-            dbcontext.Set<TEntity>().Attach(entity);
-            dbcontext.Entry<TEntity>(entity).State = EntityState.Deleted;
+            //dbcontext.Set<TEntity>().Attach(entity);
+            //dbcontext.Entry<TEntity>(entity).State = EntityState.Deleted;
+            dbcontext.Set<TEntity>().Remove(entity);
             return dbTransaction == null ? this.Commit() : 0;
         }
         public int Delete<TEntity>(Expression<Func<TEntity, bool>> predicate) where TEntity : class
         {
-            var entitys = dbcontext.Set<TEntity>().Where(predicate).ToList();
-            entitys.ForEach(m => dbcontext.Entry<TEntity>(m).State = EntityState.Deleted);
-            return dbTransaction == null ? this.Commit() : 0;
+            
+                var entitys = dbcontext.Set<TEntity>().Where(predicate).ToList();
+                entitys.ForEach(m => dbcontext.Entry<TEntity>(m).State = EntityState.Deleted);
+                return dbTransaction == null ? this.Commit() : 0;
+            
+        }
+        public async System.Threading.Tasks.Task<bool> Delete(T Entity)
+        {
+            //老写法            
+            //db.Set<T>().Attach(Entity);         
+            //db.Entry(Entity).State = EntityState.Deleted;         
+            //新写法        
+            dbcontext.Set<T>().Remove(Entity);
+            return await dbcontext.SaveChangesAsync() > 0;
         }
         public TEntity FindEntity<TEntity>(object keyValue) where TEntity : class
         {
@@ -125,11 +138,11 @@ namespace ZFine.Domain.Repository
         }
         public List<TEntity> FindList<TEntity>(string strSql) where TEntity : class
         {
-            return null;// dbcontext.Database.SqlQuery<TEntity>(strSql).ToList<TEntity>();
+            return dbcontext.Set<TEntity>().FromSql(strSql).ToList();// dbcontext.Database.SqlQuery<TEntity>(strSql).ToList<TEntity>();
         }
         public List<TEntity> FindList<TEntity>(string strSql, DbParameter[] dbParameter) where TEntity : class
         {
-            return null;// dbcontext.Database.SqlQuery<TEntity>(strSql, dbParameter).ToList<TEntity>();
+            return dbcontext.Set<TEntity>().FromSql(strSql, dbParameter).ToList();// dbcontext.Database.SqlQuery<TEntity>(strSql, dbParameter).ToList<TEntity>();
         }
         public List<TEntity> FindList<TEntity>(Pagination pagination) where TEntity : class,new()
         {
@@ -186,6 +199,10 @@ namespace ZFine.Domain.Repository
             pagination.records = tempData.Count();
             tempData = tempData.Skip<TEntity>(pagination.rows * (pagination.page - 1)).Take<TEntity>(pagination.rows).AsQueryable();
             return tempData.ToList();
+        }
+        private IEnumerable<T> CompileQuery(Expression<Func<T, bool>> exp)
+        {
+            var func = EF.CompileQuery((ZFineDbContext context, Expression<Func<T, bool>> exps) => context.Set<T>().Where(exp)); return func(dbcontext, exp);
         }
     }
 }
