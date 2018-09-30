@@ -1,0 +1,254 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Form.cshtml";
+}
+
+<link href="~/Content/css/fullCalendar/fullcalendar.min.css" rel="stylesheet" />
+<link href="~/Content/css/fullCalendar/fullcalendar.print.min.css" rel="stylesheet" />
+<script src="~/Content/js/fullCalendar/moment.min.js"></script>
+<script src="~/Content/js/fullCalendar/fullcalendar.min.js"></script>
+<script src="~/Content/js/fullCalendar/gcal.min.js"></script>
+<script src="~/Content/js/fullCalendar/locale-all.js"></script>
+
+<div class="mail-box">
+    <div class="mail-header">日程管理</div>
+    <div class="mail-body">
+        <div id="calendar" style="height: 750px;width: 950px;margin: 10px auto;"></div>
+        <!-- style="display: none;" -->
+        <div class="layer-hidden-line">
+            <form role="form" class="m-t-form" id="Form">
+                <input name="id" id="id" type="hidden" value="">
+                <div class="row">
+                    <div class="col-xs-12 layer-condensed-case">
+                        <div class="form-group">
+                            <label for="classroomId"> 日程内容 </label>
+                            <span class="input-icon icon-left">
+                                <input type="text" class="form-control" id="content" name="title"
+                                       placeholder="请输入日程内容" data-required="true"
+                                       data-descriptions="content" maxlength="50">
+                                <i class="spl-icon-book-open"> </i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 layer-condensed-case">
+                        <div class="form-group">
+                            <label for="classroomId"> 开始时间 </label>
+                            <span class="input-icon icon-left">
+                                <input type="text" readonly="readonly" class="form-control date-picker-text" id="startTime" name="start"
+                                       placeholder="请输入开始时间" data-required="true" data-descriptions="startTime" maxlength="50">
+                                <i class="spl-icon-book-open"> </i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row" id="divEndTime" style="display: none;">
+                    <div class="col-xs-12 layer-condensed-case">
+                        <div class="form-group">
+                            <label for="classroomId">结束时间</label>
+                            <span class="input-icon icon-left">
+                                <input type="text" readonly="readonly" class="date-picker-text form-control" id="endTime" name="end"
+                                       placeholder="请输入结束时间" maxlength="50">
+                                <i class="spl-icon-book-open"> </i>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 layer-condensed-case">
+                        <div class="form-group">
+                            <label>
+                                <input type="checkbox" name="wholeChk" id="wholeChk" checked="checked">
+                                <span class="text">全天</span>
+                            </label>
+                            <label>
+                                <input type="checkbox" name="endTimeChk" id="endTimeChk" onclick="changeState(this)">
+                                <span class="text">结束时间</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+                <div class="row margin-top-10">
+                    <div class="col-xs-4 form-action-left" id="del" style="display: none;" onclick="del()">
+                        <input type="button" value="删&nbsp;&nbsp;除"
+                               class="btn btn-default btn-sm" />
+                    </div>
+                    <div class="col-xs-4 form-action-left">
+                        <input type="reset" value="重&nbsp;&nbsp;置"
+                               class="btn btn-default btn-sm" />
+                    </div>
+                    <div class="col-xs-4 form-action-right">
+                        <input type="submit" value="提&nbsp;&nbsp;交"
+                               class="btn btn-primary btn-sm" />
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+<script>
+    var calendar;
+    $(function () {
+        
+        calendar = $('#calendar').fullCalendar({
+            firstDay: 0,//设置一周中显示的第一天是哪天，周日是0，周一是1
+            buttonText: {//设置日历头部各按钮的显示文本信息
+                today: '今天/本周',
+                month: '月',
+                week: '周',
+                day: '日'
+            },
+            allDayText: '全天',
+            locale: "zh-cn",//多语言
+            height: 600,
+            header: {//设置日历头部信息。
+                left: 'prev,next today',
+                center: 'title',
+                right: 'month,agendaWeek,agendaDay'
+            },
+            editable: false,//不能进行编辑
+            droppable: false,
+            drop: function (date, allDay) { // this function is called when something is dropped
+                var originalEventObject = $(this).data('eventObject');
+                var $extraEventClass = $(this).attr('data-class');
+                var copiedEventObject = $.extend({}, originalEventObject);
+                copiedEventObject.start = date;
+                copiedEventObject.allDay = allDay;
+                if ($extraEventClass) copiedEventObject['className'] = [$extraEventClass];
+                $('#calendar').fullCalendar('renderEvent', copiedEventObject, true);
+                if ($('#drop-remove').is(':checked')) {
+                    $(this).remove();
+                }
+
+            },
+            selectable: true,//是否允许用户通过单击或拖动选择日历中的对象，包括天和时间
+            selectHelper: true,//当点击或拖动选择时间时，显示默认加载的提示信息，该属性只在周/天视图里可用。
+            select: function (start, end, allDay) {//选中某个时间
+                var view = calendar.fullCalendar('getView');
+                if (view.type != 'month') {
+                    return;
+                }
+                calendar.fullCalendar('gotoDate', $.fullCalendar.moment(start._d));
+                calendar.fullCalendar('changeView', 'agendaDay');
+
+            },
+            viewRender: function (view, element) {//**当新的日期区间渲染后或者视图切换后触发**
+                $("#details").hide();
+                var type = $('#calendar').fullCalendar('getView').type;
+                if (type == "agendaWeek" || type == "basicWeek") {
+                    type = 'week';
+                } else if (type == "agendaDay" || type == "basicDay") {
+                    type = 'day';
+                } else {
+                    type = 'month';
+                }
+                var data = new Array();
+                var changePlan = new Array(); var routine; var othertasks; var release;
+                $("#calendar").fullCalendar('removeEvents');
+                if (arrayFindString(select, "change") != null || arrayFindString(select, "all") != null) {
+                    if (select.length > 1 || arrayFindString(select, "all") != null) {
+                        changePlan = jQueryAjax("/changeCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "mult": 1,
+                        }, null, 'get');
+                    } else {
+                        changePlan = jQueryAjax("/changeCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "mult": 0,
+                        }, null, 'get');
+                    }
+                    data = data.concat(changePlan);
+                }
+                if (arrayFindString(select, "routine") != null || arrayFindString(select, "all") != null) {
+                    if (select.length > 1 || arrayFindString(select, "all") != null) {
+                        routine = jQueryAjax("/planTaskCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "other": 0,
+                            "mult": 1,
+                        }, null, 'get');
+                    } else {
+                        routine = jQueryAjax("/planTaskCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "other": 0,
+                            "mult": 0,
+                        }, null, 'get');
+                    }
+
+                    data = data.concat(routine);
+                }
+                if (arrayFindString(select, "othertasks") != null || arrayFindString(select, "all") != null) {
+                    if (select.length > 1 || arrayFindString(select, "all") != null) {
+                        othertasks = jQueryAjax("/planTaskCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "other": 1,
+                            "mult": 1,
+                        }, null, 'get');
+                    }
+                    else {
+                        othertasks = jQueryAjax("/planTaskCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "other": 1,
+                            "mult": 0,
+                        }, null, 'get');
+                    }
+                    data = data.concat(othertasks);
+                }
+                if (arrayFindString(select, "report") != null || arrayFindString(select, "all") != null) {
+                    if (select.length > 1 || arrayFindString(select, "all") != null) {
+                        release = jQueryAjax("/releaseCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "mult": 1,
+                        }, null, 'get');
+                    } else {
+                        release = jQueryAjax("/releaseCalendarAction/changePlan", {
+                            "viewType": type,
+                            "viewDate": formatDate($('#calendar').fullCalendar('getDate')._d, 'yyyy/MM/dd'),
+                            "mult": 0,
+                        }, null, 'get');
+                    }
+                    data = data.concat(release);
+                }
+                for (var i = 0; i < data.length; i++) {
+                    var start = new Date(data[i][3]);
+                    var end = new Date(data[i][4]);
+                    $("#calendar").fullCalendar('renderEvent', {
+                        "id": data[i][0],
+                        "title": data[i][1],
+                        "start": start,
+                        "startTime": start,
+                        "end": end,
+                        "endTime": end,
+                        "type": data[i][9],
+                        "content": data[i][2],
+                        "className": data[i][5],
+                        "ourl": data[i][13]
+                    }, true);
+                }
+            },
+            eventClick: function (calEvent, jsEvent, view) {//当点击日历中的某一日程（事件）时，触发此操作
+                $("#details").hide();
+                var url = getRootPath() + calEvent.ourl;
+                window.parent.Addtabs.add({
+                    id: calEvent.id,
+                    title: calEvent.title,
+                    content: "",
+                    url: url + calEvent.id
+                });
+            },
+            eventMouseover: function (event, jsEvent, view) {//鼠标划过的事件
+            },
+            eventMouseout: function (event, jsEvent, view) {//鼠标离开的事件
+            }
+        });
+    });
+</script>
+
