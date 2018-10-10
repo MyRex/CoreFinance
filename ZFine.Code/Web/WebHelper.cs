@@ -5,8 +5,6 @@
  *
 *********************************************************************************/
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Http.Internal;
-using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -185,7 +183,7 @@ namespace ZFine.Code
             if (HttpContext.Current.Request.Cookies.ContainsKey(strName))
             {
                 HttpContext.Current.Response.Cookies.Delete(strName);
-                HttpContext.Current.Response.Cookies.Append(strName,strValue);
+                HttpContext.Current.Response.Cookies.Append(strName, strValue);
             }
             HttpContext.Current.Response.Cookies.Append(strName, strValue);
         }
@@ -202,7 +200,7 @@ namespace ZFine.Code
             if (HttpContext.Current.Request.Cookies.ContainsKey(strName))
             {
                 HttpContext.Current.Response.Cookies.Delete(strName);
-                HttpContext.Current.Response.Cookies.Append(strName, strValue,co);
+                HttpContext.Current.Response.Cookies.Append(strName, strValue, co);
             }
             HttpContext.Current.Response.Cookies.Append(strName, strValue, co);
 
@@ -230,7 +228,7 @@ namespace ZFine.Code
             //objCookie.Expires = DateTime.Now.AddYears(-5);
             CookieOptions co=new CookieOptions();
             co.Expires = DateTime.Now.AddYears(-5);
-            HttpContext.Current.Response.Cookies.Append(CookiesName.Trim(), "",co);
+            HttpContext.Current.Response.Cookies.Append(CookiesName.Trim(), "", co);
             
         }
         #endregion

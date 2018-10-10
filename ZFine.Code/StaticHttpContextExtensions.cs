@@ -6,7 +6,7 @@ namespace ZFine.Code
 {
     public static class StaticHttpContextExtensions
     {
-        public static void AddHttpContextAccessor(this IServiceCollection services)
+        public static void AddHttpContextAccessorP(this IServiceCollection services)
         {
             services.AddSingleton<IHttpContextAccessor, Microsoft.AspNetCore.Http.HttpContextAccessor>();
         }

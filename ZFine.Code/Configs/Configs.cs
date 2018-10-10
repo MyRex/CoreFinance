@@ -4,6 +4,7 @@
  * Description: MVC快速开发平台
  *
 *********************************************************************************/
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Configuration;
 namespace ZFine.Code
 {

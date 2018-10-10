@@ -19,6 +19,7 @@ namespace ZFine.Web.Controllers
 {
     public class LoginController : Controller
     {
+
         [HttpGet]
         public virtual IActionResult Index()
         {
@@ -55,7 +56,7 @@ namespace ZFine.Web.Controllers
             logEntity.F_Type = DbLogType.Login.ToString();
             try
             {
-                if (HttpContext.Session.GetString("ZFine_session_verifycode").IsEmpty() || Md5.md5(code.ToLower(), 16) != HttpContext.Session.GetString("ZFine_session_verifycode").ToString())
+                if (HttpContext.Session.GetString("ZFine_session_verifycode").IsEmpty() || Md5.md5(code.ToLower(), 16) != Code.HttpContext.Current.Session.GetString("ZFine_session_verifycode").ToString())
                 {
                     throw new Exception("验证码错误，请重新输入");
                 }

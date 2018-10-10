@@ -23,15 +23,16 @@ namespace ZFine.Web
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.Configure<CookiePolicyOptions>(options =>
-            {
-                // This lambda determines whether user consent for non-essential cookies is needed for a given request.
-                options.CheckConsentNeeded = context => true;
-                options.MinimumSameSitePolicy = SameSiteMode.None;
-            });
+            //该段代码会影响Session\Cookies使用
+            //services.Configure<CookiePolicyOptions>(options =>
+            //{
+            //    // This lambda determines whether user consent for non-essential cookies is needed for a given request.
+            //    options.CheckConsentNeeded = context => true;
+            //    options.MinimumSameSitePolicy = SameSiteMode.None;
+            //});
             services.AddMemoryCache();
             services.TryAddSingleton<IHttpContextAccessor, HttpContextAccessor>();
-
+            services.AddHttpContextAccessorP();
             //注意：一定要加 sslmode=none 
             var connectString = Configuration.GetConnectionString("MysqlConnection"); services.AddDbContext<Domain.Entity.ZFineDbContext>(options =>
 
@@ -43,12 +44,13 @@ new LoggerFactory().AddConsole()); //加入该句会把EF Core执行过程中的
             //var connection = Configuration.GetConnectionString("MysqlConnection");
             //services.AddDbContext<Domain.Entity.ZFineDbContext>(options => options.UseMySql(connection, b => b.MigrationsAssembly("ZFine.Web")));
             //services.Add(new ServiceDescriptor(typeof(Domain.Entity.ZFineDbContext), new Domain.Entity.ZFineDbContext(Configuration.GetConnectionString("DefaultConnection"))));
+            
             services.AddSession();
             services.AddMvc().SetCompatibilityVersion(CompatibilityVersion.Version_2_1);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IHostingEnvironment env)
+        public void Configure(IApplicationBuilder app, IHostingEnvironment env, ILoggerFactory loggerFactory)
         {
             if (env.IsDevelopment())
             {
